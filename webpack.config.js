@@ -237,7 +237,7 @@ const webpackConfig = {
 		],
 	},
 	resolve: {
-			extensions: [ '.json', '.js', '.jsx', '.ts', '.tsx' ],
+		extensions: [ '.json', '.js', '.jsx', '.ts', '.tsx' ],
 		modules: [ path.join( __dirname, 'client' ), 'node_modules' ],
 		alias: Object.assign(
 			{
@@ -319,7 +319,7 @@ if ( ! config.isEnabled( 'desktop' ) ) {
 // The SVG external content polyfill (svg4everybody) isn't needed for evergreen browsers, so don't bundle it.
 if ( browserslistEnv === 'evergreen' ) {
 	webpackConfig.plugins.push(
-		new webpack.NormalModuleReplacementPlugin( /^svg4everybody$/, 'lodash/noop' )
+		new webpack.NormalModuleReplacementPlugin( /^svg4everybody$/, 'lodash-es/noop' )
 	);
 }
 
