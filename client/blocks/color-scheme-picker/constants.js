@@ -41,5 +41,12 @@ export default function( translate ) {
 				cssClass: 'is-sakura',
 			},
 		},
+		{
+			label: translate( 'Sunset' ),
+			value: 'sunset',
+			thumbnail: {
+				cssClass: 'is-sunset',
+			},
+		},
 	] );
 }
