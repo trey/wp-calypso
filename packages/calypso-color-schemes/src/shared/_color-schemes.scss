@@ -278,7 +278,7 @@
 	--sidebar-gridicon-fill: #{$muriel-gray-500};
 	--sidebar-heading-color: #{$muriel-gray-500};
 	--sidebar-footer-button-color: #{$muriel-gray-700};
-	--sidebar-menu-link-secondary-text-color: #{$muriel-red-50};
+	--sidebar-menu-link-secondary-text-color: #{$muriel-gray-700};
 	--sidebar-menu-a-first-child-after-background: #{hex-to-rgb( $muriel-white )};
 	--sidebar-menu-selected-background-color: #{$muriel-blue-50};
 	--sidebar-menu-selected-a-color: var( --color-primary );
@@ -1304,7 +1304,7 @@
 		--sidebar-gridicon-fill: #{$muriel-white};
 		--sidebar-heading-color: #{$muriel-red-50};
 		--sidebar-footer-button-color: #{$muriel-white};
-		--sidebar-menu-link-secondary-text-color: #{$muriel-red-900};
+		--sidebar-menu-link-secondary-text-color: #{$muriel-red-50};
 		--sidebar-menu-a-first-child-after-background: #{hex-to-rgb( $muriel-red-600 )};
 		--sidebar-menu-selected-background-color: #{$muriel-hot-yellow-500};
 		--sidebar-menu-selected-a-color: #{$muriel-gray-800};
