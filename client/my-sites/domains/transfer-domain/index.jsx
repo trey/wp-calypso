@@ -150,6 +150,8 @@ export class TransferDomain extends Component {
 
 		const { errorMessage } = this.state;
 
+		const forcePrecheck = this.props.lastDomainStatus === 'transferrable';
+
 		return (
 			<span>
 				<QueryProductsList />
@@ -165,6 +167,7 @@ export class TransferDomain extends Component {
 					onRegisterDomain={ this.handleRegisterDomain }
 					onTransferDomain={ this.handleTransferDomain }
 					analyticsSection="domains"
+					forcePrecheck={ forcePrecheck }
 				/>
 			</span>
 		);

@@ -1239,7 +1239,10 @@ class RegisterDomainStep extends React.Component {
 		if ( this.props.useYourDomainUrl ) {
 			useYourDomainUrl = this.props.useYourDomainUrl;
 		} else {
-			const query = stringify( { initialQuery: this.state.lastQuery.trim() } );
+			const query = stringify( {
+				initialQuery: this.state.lastQuery.trim(),
+				lastDomainStatus: this.state.lastDomainStatus,
+			} );
 			useYourDomainUrl = `${ this.props.basePath }/use-your-domain`;
 			if ( this.props.selectedSite ) {
 				useYourDomainUrl += `/${ this.props.selectedSite.slug }?${ query }`;
