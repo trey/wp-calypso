@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { Reducer, AnyAction, Dispatch } from 'redux';
+import { Reducer, AnyAction, Dispatch, Action } from 'redux';
 
 /**
  * Internal dependencies
@@ -45,7 +45,7 @@ type DataId = string;
 export const httpData = new Map< DataId, Resource >();
 export const listeners = new Set();
 
-export const empty: Readonly<Resource> = Object.freeze( {
+export const empty: Readonly< Resource > = Object.freeze( {
 	state: DataState.Uninitialized,
 	data: undefined,
 	error: undefined,
@@ -107,7 +107,7 @@ export const update = ( id: DataId, state: DataState, data?: any ) => {
 	return updated;
 };
 
-const fetch = action => {
+const fetch = ( action: HttpDataAction ) => {
 	update( action.id, DataState.Pending );
 
 	return [
@@ -121,7 +121,7 @@ const fetch = action => {
 	];
 };
 
-const onError = ( action, error ) => {
+const onError = ( action: HttpDataAction, error: any ) => {
 	update( action.id, DataState.Failure, error );
 
 	return { type: HTTP_DATA_TICK };
@@ -159,16 +159,15 @@ const parseResponse = ( data: any, fromApi: ResponseParser ): ParseResult => {
 	}
 };
 
-const onSuccess = ( action: AnyAction & { fromApi: Lazy< ResponseParser > }, apiData: any ) => {
-	const fromApi = action.fromApi();
-	const [ error, data ] = fromApi ? parseResponse( apiData, fromApi ) : [ undefined, [] ];
+const onSuccess = ( action: HttpDataAction, apiData: any ) => {
+	const [ error, data ] = parseResponse( apiData, action.fromApi() );
 
 	if ( undefined !== error ) {
 		return onError( action, error );
 	}
 
 	update( action.id, DataState.Success, apiData );
-	(data as ResourcePair[]).forEach( ( [ id, resource ] ) =>
+	( data as ResourcePair[] ).forEach( ( [ id, resource ] ) =>
 		update( id, DataState.Success, resource )
 	);
 
@@ -188,8 +187,14 @@ export default {
 export const reducer: Reducer< number > = ( state = 0, { type } ) =>
 	HTTP_DATA_TICK === type ? state + 1 : state;
 
+interface HttpDataAction extends Action< typeof HTTP_DATA_REQUEST > {
+	id: DataId;
+	fetch: AnyAction;
+	fromApi: Lazy< ResponseParser >;
+}
+
 let dispatch: Dispatch< AnyAction >;
-let dispatchQueue: AnyAction[] = [];
+let dispatchQueue: HttpDataAction[] = [];
 
 export const enhancer = next => ( ...args ) => {
 	const store = next( ...args );
@@ -241,7 +246,7 @@ export const requestHttpData = (
 			throw new Error( 'Cannot use HTTP data without injecting Redux store enhancer!' );
 		}
 
-		const action = {
+		const action: HttpDataAction = {
 			type: HTTP_DATA_REQUEST,
 			id: requestId,
 			fetch: 'function' === typeof fetchAction ? fetchAction() : fetchAction,
@@ -255,7 +260,7 @@ export const requestHttpData = (
 };
 
 interface Query {
-	[key: string]: Lazy<Resource>;
+	[key: string]: Lazy< Resource >;
 }
 
 type Results< T extends Query > = { [P in keyof T]: ReturnType< T[P] > };
