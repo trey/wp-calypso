@@ -35,6 +35,7 @@ import { getByPurchaseId, hasLoadedUserPurchasesFromServer } from 'state/purchas
 import { getSite, isRequestingSites } from 'state/sites/selectors';
 import { getUser } from 'state/users/selectors';
 import { managePurchase } from '../paths';
+import AutorenewalDisablingDialog from './autorenewal-disabling-dialog';
 import FormToggle from 'components/forms/form-toggle';
 import PaymentLogo from 'components/payment-logo';
 import { CALYPSO_CONTACT } from 'lib/url/support';
@@ -300,10 +301,24 @@ class PurchaseMeta extends Component {
 		);
 	}
 
-	onToggleAutorenewal = () => {
-		// TODO: send actual autorenewal enabling / disabling action here and show a pop-up notice
+	onCloseAutorenewalDisablingDialog = () => {
 		this.setState( {
-			isAutorenewalEnabled: ! this.state.isAutorenewalEnabled,
+			showAutorenewalDisablingDialog: false,
+		} );
+	};
+
+	onToggleAutorenewal = () => {
+		// TODO: Use the actual autorenewal enabling / disabling state & actions
+		const { isAutorenewalEnabled } = this.state;
+
+		if ( isAutorenewalEnabled ) {
+			this.setState( {
+				showAutorenewalDisablingDialog: true,
+			} );
+		}
+
+		this.setState( {
+			isAutorenewalEnabled: ! isAutorenewalEnabled,
 		} );
 	};
 
@@ -371,7 +386,7 @@ class PurchaseMeta extends Component {
 	}
 
 	render() {
-		const { translate, purchaseId } = this.props;
+		const { translate, purchaseId, purchase } = this.props;
 
 		if ( isDataLoading( this.props ) || ! purchaseId ) {
 			return this.renderPlaceholder();
@@ -389,6 +404,14 @@ class PurchaseMeta extends Component {
 					{ this.renderPaymentDetails() }
 				</ul>
 				{ this.renderContactSupportToRenewMessage() }
+				{ config.isEnabled( 'autorenewal-toggle' ) && this.state.showAutorenewalDisablingDialog && (
+					<AutorenewalDisablingDialog
+						planName={ 'Premium' }
+						siteDomain={ 'xd.blog' }
+						expiryDate={ purchase.expiryMoment.format( 'LL' ) }
+						onClose={ this.onCloseAutorenewalDisablingDialog }
+					/>
+				) }
 			</Fragment>
 		);
 	}
