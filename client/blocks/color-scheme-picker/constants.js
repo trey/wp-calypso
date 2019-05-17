@@ -41,5 +41,12 @@ export default function( translate ) {
 				cssClass: 'is-sakura',
 			},
 		},
+		{
+			label: translate( 'Contrast' ),
+			value: 'contrast',
+			thumbnail: {
+				cssClass: 'is-contrast',
+			},
+		},
 	] );
 }
